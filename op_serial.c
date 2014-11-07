@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
     int step;
     for(step = 100000; step <= 500000; step = step + STEP)
     {
-	    	int a, b, d;
+	   		int a, b, d;
     		int e[6] = {0,0,0,0,0,0};  // 用于统计严重偏离平衡位置的原子
     		float esum;
     		float f0, f1, f2;
@@ -87,60 +87,60 @@ int main(int argc, char* argv[])
         if((pin = fopen(buf2, "w")) == NULL)  exit(0);
         for(a = 0; a < NUMATOMS; a++)
         {
-          d = 0;
-          for(b=0; b < NUMATOMS; b++)
-          {
-              rx = (Ti[b*3] - Ni[a*3]);
-              ry = (Ti[b*3+1] - Ni[a*3+1]);
-              rz = (Ti[b*3+2] - Ni[a*3+2]);
-              x = fabs(rx * xx + ry * xy + rz * xz);
-              if(x >= x_cut) x = xx - x;
-              else continue;
-              y = fabs(ry * yy + rz * yz);
-              if(y >= y_cut)y = yy - y;
-              else continue;
-              z = fabs(rz*zz);
-              if(z >= z_cut) z = zz - z;
-              else continue;
-              c[d] = sqrt(x*x + y*y + z*z);
-              d++;
-          }
-          quicksort(c, 0, d-1);
-          f0 = (c[0] + c[1] + c[6] + c[7]) / 2.0;
-          f1 = (c[2] + c[5] + c[3] + c[4]) / 2.0;
-          f2 = (f1 * (5.22 + 5.37) - f0 * (5.22 + 5.02)) / (5.22 * (5.02 - 5.37));
-					// 搞不懂这是干啥的
-          if(f2 <- 1.5)
-					{
-              f2 = -2.0;
-              e[0]++;
-          }
-        	else if(f2 >= -1.5 && f2 <- 0.2)
-          {
-              f2 = -1.0;
-              e[1]++;
-          }
-        	else if(f2 >= -0.2 && f2 < 0.1)
-          {
-              f2 = 0.2;
-              e[2]++;
-          }
-        	else if(f2 >= 0.1 && f2 < 1.8115)
-          {
-              f2 = 1.0;
-              e[3]++;
-          }
-          else if(f2 >= 1.8115 && f2 < 2.9)
-          {
-              f2 = 2.6133;
-              e[4]++;
-          }
-          else
-          {
-              f2 = 3.5;
-              e[5]++;
-          }
-          fprintf(pin, "%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.4f\n", c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], f2);
+          	d = 0;
+          	for(b=0; b < NUMATOMS; b++)
+          	{
+              	rx = (Ti[b*3] - Ni[a*3]);
+              	ry = (Ti[b*3+1] - Ni[a*3+1]);
+              	rz = (Ti[b*3+2] - Ni[a*3+2]);
+              	x = fabs(rx * xx + ry * xy + rz * xz);
+              	if(x >= x_cut) x = xx - x;
+              	else continue;
+              	y = fabs(ry * yy + rz * yz);
+              	if(y >= y_cut)y = yy - y;
+              	else continue;
+              	z = fabs(rz*zz);
+              	if(z >= z_cut) z = zz - z;
+              	else continue;
+              	c[d] = sqrt(x*x + y*y + z*z);
+              	d++;
+          	}
+          	quicksort(c, 0, d-1);
+          	f0 = (c[0] + c[1] + c[6] + c[7]) / 2.0;
+          	f1 = (c[2] + c[5] + c[3] + c[4]) / 2.0;
+          	f2 = (f1 * (5.22 + 5.37) - f0 * (5.22 + 5.02)) / (5.22 * (5.02 - 5.37));
+						//阶梯函数。。 
+          	if(f2 <- 1.5)
+						{
+              	f2 = -2.0;
+              	e[0]++;
+          	}
+        		else if(f2 >= -1.5 && f2 <- 0.2)
+          	{
+              	f2 = -1.0;
+              	e[1]++;
+          	}
+        		else if(f2 >= -0.2 && f2 < 0.1)
+          	{
+              	f2 = 0.2;
+              	e[2]++;
+          	}
+        		else if(f2 >= 0.1 && f2 < 1.8115)
+          	{
+              	f2 = 1.0;
+              	e[3]++;
+          	}
+          	else if(f2 >= 1.8115 && f2 < 2.9)
+          	{
+              	f2 = 2.6133;
+              	e[4]++;
+          	}
+          	else
+          	{
+              	f2 = 3.5;
+              	e[5]++;
+          	}
+          	fprintf(pin, "%.2f %.2f %.2f %.2f %.2f %.2f %.2f %.2f %.4f\n", c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], f2);
         }
         fprintf(pin, "\n");
         fprintf(pin, "\n");
