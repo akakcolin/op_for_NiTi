@@ -5,7 +5,7 @@
 #define NUMATOMS  13500  // 单原子数 Ni  Ti
 #define CUTOFF    4.5    // 截断距离
 #define STEP	100000     // 步长
-
+#define FINALSTEP 500000
 void quicksort(float c[], int low, int high)
 {
     int i = low;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     int step;
 
 		#pragma omp parallel for num_threads(thread_count)
-    for(step = 100000; step <= 500000; step = step + STEP)
+    for(step = 100000; step <= FINALSTEP; step = step + STEP)
     {
 	   		int a, b, d;
     		int e[6] = {0,0,0,0,0,0};  // 用于统计严重偏离平衡位置的原子
@@ -101,12 +101,15 @@ int main(int argc, char* argv[])
               	rz = (Ti[b*3+2] - Ni[a*3+2]);
               	x = fabs(rx * xx + ry * xy + rz * xz);
               	if(x >= x_cut) x = xx - x;
+								else if ( x <= CUTOFF) x = x;
               	else continue;
               	y = fabs(ry * yy + rz * yz);
               	if(y >= y_cut)y = yy - y;
+								else if ( y <= CUTOFF) y = y;
               	else continue;
               	z = fabs(rz*zz);
               	if(z >= z_cut) z = zz - z;
+								else if ( z <= CUTOFF) z = z;
               	else continue;
               	c[d] = sqrt(x*x + y*y + z*z);
               	d++;
@@ -159,15 +162,18 @@ int main(int argc, char* argv[])
                 rx = (Ni[b*3] - Ti[a*3]);
                 ry = (Ni[b*3+1] - Ti[a*3+1]);
                 rz = (Ni[b*3+2] - Ti[a*3+2]);
-                if(x >= x_cut) x = xx - x;
-                else continue;
-                y = fabs(ry * yy + rz * yz);
-                if(y >= y_cut)y = yy - y;
-                else continue;
-                z = fabs(rz*zz);
-                if(z >= z_cut) z = zz - z;
-                else continue;
-                c[d] = sqrt(x*x + y*y + z*z);
+								if(x >= x_cut) x = xx - x;
+								else if ( x <= CUTOFF) x = x;
+              	else continue;
+              	y = fabs(ry * yy + rz * yz);
+              	if(y >= y_cut)y = yy - y;
+								else if ( y <= CUTOFF) y = y;
+              	else continue;
+              	z = fabs(rz*zz);
+              	if(z >= z_cut) z = zz - z;
+								else if ( z <= CUTOFF) z = z;
+              	else continue;
+               c[d] = sqrt(x*x + y*y + z*z);
                 d++;
             }
             quicksort(c, 0, d-1);
